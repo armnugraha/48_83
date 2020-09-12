@@ -17,6 +17,7 @@ var gearsRouter = require('./routes/gears')
 var seedersRouter = require('./routes/seeds')
 
 var productsRouter = require('./routes/products')
+var transactionsRouter = require('./routes/transactions')
 
 var app = express()
 
@@ -48,6 +49,7 @@ app.use('/roles', rolesRouter)
 app.use('/gears', gearsRouter)
 app.use('/seeders', seedersRouter)
 app.use('/products', productsRouter)
+app.use('/transactions', transactionsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
