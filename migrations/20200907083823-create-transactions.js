@@ -23,8 +23,12 @@ module.exports = {
       id_seller: {
         type: Sequelize.INTEGER
       },
-      total: {
+      total_pay: {
         type: Sequelize.INTEGER
+      },
+      total_back: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,

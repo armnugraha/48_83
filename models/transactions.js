@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     total_response: DataTypes.INTEGER,
     id_client: DataTypes.INTEGER,
     id_seller: DataTypes.INTEGER,
-    total: DataTypes.INTEGER
+    total_pay: DataTypes.INTEGER,
+    total_back: DataTypes.INTEGER
   }, {});
   transactions.associate = function(models) {
     // associations can be defined here
