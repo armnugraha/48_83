@@ -23,6 +23,9 @@ module.exports = {
       id_seller: {
         type: Sequelize.INTEGER
       },
+      items: {
+        type: Sequelize.TEXT
+      },
       cash: {
         type: Sequelize.INTEGER
       },
