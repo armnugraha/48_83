@@ -5,7 +5,15 @@ module.exports = (sequelize, DataTypes) => {
     category_id: DataTypes.INTEGER,
     unit_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
-    price: DataTypes.STRING,
+    price: { 
+        type: DataTypes.STRING, 
+        get: function() {
+            return JSON.parse(this.getDataValue('price'));
+        }, 
+        set: function(val) {
+            return this.setDataValue('price', JSON.stringify(val));
+        }
+    },
     discount: DataTypes.INTEGER
   }, {});
   products.associate = function(models) {

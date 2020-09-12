@@ -16,6 +16,8 @@ var rolesRouter = require('./routes/roles')
 var gearsRouter = require('./routes/gears')
 var seedersRouter = require('./routes/seeds')
 
+var productsRouter = require('./routes/products')
+
 var app = express()
 
 // view engine setup
@@ -45,6 +47,7 @@ app.use('/reviews', reviewsRouter)
 app.use('/roles', rolesRouter)
 app.use('/gears', gearsRouter)
 app.use('/seeders', seedersRouter)
+app.use('/products', productsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
