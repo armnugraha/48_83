@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     total_response: DataTypes.INTEGER,
     id_client: DataTypes.INTEGER,
     id_seller: DataTypes.INTEGER,
+    cash: DataTypes.INTEGER,
     total_pay: DataTypes.INTEGER,
     total_back: DataTypes.INTEGER
   }, {});
