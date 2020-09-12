@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     id_client: DataTypes.INTEGER,
     id_seller: DataTypes.INTEGER,
     items: { 
-        type: DataTypes.STRING, 
+        type: DataTypes.TEXT, 
         get: function() {
             return JSON.parse(this.getDataValue('items'));
         }, 
