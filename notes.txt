@@ -1,0 +1,106 @@
+#users
+-id
+-role_id
+-company_id
+-username > unique
+-name
+-pasw > min 8
+-email > unique + verification
+-number
+-last_login
+-is_active (0/1)
+
+#role
+-id
+-name
+
+#company
+-id
+-name
+-alamat
+-day
+-shift
+-is_break (istirahat, 0/1)
+-is_close (libur, 0/1)
+-is_active (0/1)
+
+sequelize model:generate --name companies --attributes name:string,address:string,day:string,shift:time,is_break:boolean,is_close:boolean,is_active:boolean
+
+#category
+-id
+-name (makanan, minuman, detergen, snack)
+
+sequelize model:generate --name categories --attributes name:string
+
+#products
+-id
+-company_id
+-category_id > 1 / [1,2,3]
+-unit_id (satuan) > all, box, dozen, unit
+-name
+-price > {box: 200000, dozen:1000, unit:5000}
+-discount > 5 "%" > select type price then add discount
+
+
+sequelize model:generate --name products --attributes company_id:integer,category_id:integer,unit_id:integer,name:string,price:integer,discount:integer
+
+#product_files
+-id
+-product_id
+-data
+
+sequelize model:generate --name product_files --attributes product_id:integer,data:text
+
+#transactions (parrent)
+-id
+-company_id
+-code
+-total_response (akumulatif dari awal - finish) (minute)
+-id_client
+-id_seller
+-total
+
+sequelize model:generate --name transactions --attributes company_id:integer,code:string,total_response:integer,id_client:integer,id_seller:integer,total:integer
+
+#transaction_lists (many)
+-id
+-transaction_id
+-product_id
+-unit_id
+-qty
+-price
+-discount
+-not_stock
+-total
+
+
+sequelize model:generate --name transaction_lists --attributes transaction_id:integer,product_id:integer,unit_id:integer,qty:integer,price:integer,discount:integer,total:integer,not_stock:boolean
+
+
+#transaction_histories
+-id
+-transaction_id
+-progress_status_id
+
+sequelize model:generate --name transaction_histories --attributes transaction_id:integer,progress_status_id:integer
+
+#progress_statuses
+-id
+-name (Waiting > untuk menunggu respon dari admin jika tidak ada respon selama 1 jam bisa di batal, New > , Onprogress > sedang dikerjakan dan tambahkan waktu response prediksi, Done > selesai dan beritahukan kepada pembeli dengan mengirim onesignal, Finish, Cancelled > batal)
+
+sequelize model:generate --name progress_statuses --attributes name:string
+
+#unit_statuses
+-id
+-name
+
+#settings
+-id
+-name (update apk, notif)
+-value (0/1, null/string,)
+
+sequelize model:generate --name unit_statuses --attributes name:string
+
+proses bisnis
+1.pembeli membuat transaksi dengan status waiting (transactions & history_transaction)
+2. admin akan mengapprove pemesanan dan menambah status di history_transaction dan ambil status terakhir

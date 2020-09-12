@@ -1,0 +1,10 @@
+node_modules
+/migrations/20191120070102-create-station.backup
+/migrations/20191120070448-create-sensor.backup
+/migrations/20191120143527-create-position.backup
+/models/position.backup
+/models/sensor.backup
+/models/station.backup
+/seeders/20191120140008-station-seeder.backup
+/seeders/20191120140020-sensor-seeder.backup
+/seeders/20191120140027-position-seeder.backup
