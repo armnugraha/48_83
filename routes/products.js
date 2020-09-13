@@ -15,41 +15,39 @@ const paginate = (query, { page, pageSize }) => {
     return {...query,offset,limit};
 };
 
-// router.get('/', async (req, res, next) => {
-//  	const count_user = await Product.count({})
-//     const totalPage = Math.ceil(count_user/pageLimit)
+router.get('/', async (req, res, next) => {
+ 	const count = await Product.count({})
+    const totalPage = Math.ceil(count/pageLimit)
 
-// 	let page = +req.query.page;
-//     let pageSize = count_user;
-//  	const users = await Product.findAll(paginate(
-//     	{
-//             where: {},
-//             order: [
-//                 ['id', 'DESC']
-//             ]
-// 	    },
-//     	{ page, pageSize },
-//   	),{
-//  		include: [ Role ]
-//   	})
+	let page = +req.query.page;
+    let pageSize = count;
+ 	const data = await Product.findAll(paginate(
+    	{
+            where: {},
+            order: [
+                ['id', 'DESC']
+            ]
+	    },
+    	{ page, pageSize },
+  	))
 
-// 	if (users.length !== 0) {
-//         res.status(200).json({
-//             'status': 'ok','pageSize': totalPage,'data': users,
-//         })
-// 	} else {
-// 		res.json(view('users empty'))
-// 	}
-// })
+	if (data.length !== 0) {
+        res.status(200).json({
+            'status': 'ok','pageSize': totalPage,'data': data,
+        })
+	} else {
+		res.json(view('data empty'))
+	}
+})
 
 router.get('/:id', async (req, res, next) => {
 
-    const product = await Product.findByPk(req.params.id)
+    const data = await Product.findByPk(req.params.id)
 
-    if (product.length !== 0) {
-        res.json(view(product))
+    if (data.length !== 0) {
+        res.json(view(data))
     } else {
-        res.json(view('product empty'))
+        res.json(view('data empty'))
     }
 })
 
@@ -72,48 +70,17 @@ router.get('/name/:value', async (req, res, next) => {
     }
 })
 
-// router.post('/', async (req, res, next) => {
-//     try {
-//         const {
-//             username,name,email,password,phone,gender,birth,
-//             // height,
-//             // weight,
-//             role_id
-//         } = req.body;
-//         const users = await Models.users.create({
-//             username,name,email,password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),phone,gender,birth,
-//             // height,
-//             // weight,
-//             role_id
-//         });
-//         if (users) {
-//             let testAccount = await nodemailer.createTestAccount();
-
-//             // create reusable transporter object using the default SMTP transport
-//             let transporter = nodemailer.createTransport({
-//                 host: "smtp.gmail.com",
-//                 port: 587,
-//                 secure: false, // true for 465, false for other ports
-//                 auth: {
-//                     user: "fsbngpu@gmail.com", // generated ethereal user
-//                     pass: "envisionsapp123!", // generated ethereal password
-//                 },
-//             });
-
-//             // send mail with defined transport object
-//             let info = await transporter.sendMail({
-//                 from: '"NikreuhApps" <armannugraha85@gmail.com>', // sender address
-//                 to: email,
-//                 subject: "Konfirmasi Akun", // Subject line
-//                 text: "Selamat datang di layanan aplikasi Nikreuh, Sebelum kamu menggunakan aplikasi ini, kamu diharuskan untuk mengkonfirmasi akun kamu terlebih dahulu dengan menekan link yang ada di bawah berikut ini.", // plain text body
-//                 html: "<b>Selamat datang di layanan aplikasi Nikreuh, Sebelum kamu menggunakan aplikasi ini, kamu diharuskan untuk mengkonfirmasi akun kamu terlebih dahulu dengan menekan link yang ada di bawah berikut ini.</b>", // html body
-//             });
-//             res.json(view(users))
-//         }
-//     } catch (err) {
-//        res.json(view(err.errors[0].message))
-//     }
-// })
+router.post('/', async (req, res, next) => {
+    try {
+        const {company_id,category_id,unit_id,name,price,discount} = req.body;
+        const data = await Models.products.create({company_id,category_id,unit_id,name,price,discount});
+        if (data) {
+            res.json(view(data))
+        }
+    } catch (err) {
+       res.json(view(err.errors[0].message))
+    }
+})
 
 // router.patch('/:id', async function (req, res, next) {
 //     try {
