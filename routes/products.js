@@ -8,6 +8,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const pageLimit = 10
 const nodemailer = require("nodemailer");
+const Auth = require('./authenticate')
 
 //PAGINATION Function
 const paginate = (query, { page, pageSize }) => {
@@ -24,10 +25,9 @@ function authenticateToken(req, res, next) {
     var check = jwt.verifyLong(token, process.env.SECRET_KEY)
     if (check.status == "error") return res.sendStatus(403)
     next()
-
 }
 
-router.get('/', authenticateToken, async (req, res, next) => {
+router.get('/', Auth, async (req, res, next) => {
  	const count = await Product.count({})
     const totalPage = Math.ceil(count/pageLimit)
 
@@ -52,7 +52,7 @@ router.get('/', authenticateToken, async (req, res, next) => {
 	}
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', Auth, async (req, res, next) => {
 
     const data = await Product.findByPk(req.params.id)
 
@@ -63,7 +63,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.get('/name/:value', async (req, res, next) => {
+router.get('/name/:value', Auth, async (req, res, next) => {
 
     let keyword = "%"+req.params.value+"%"
 
@@ -82,7 +82,7 @@ router.get('/name/:value', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', Auth, async (req, res, next) => {
     try {
         const {company_id,category_id,unit_id,name,price,discount} = req.body;
         const data = await Models.products.create({company_id,category_id,unit_id,name,price,discount});
@@ -94,7 +94,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-// router.patch('/:id', async function (req, res, next) {
+// router.patch('/:id', Auth, async function (req, res, next) {
 //     try {
 //         const usersId = req.params.id;
 //         const {
@@ -126,7 +126,7 @@ router.post('/', async (req, res, next) => {
 //     }
 // });
 
-// router.delete('/:id', async function (req, res, next) {
+// router.delete('/:id', Auth, async function (req, res, next) {
 //     try {
 //         const usersId = req.params.id;
 //         const users = await Models.users.destroy({ where: {id: usersId}})
