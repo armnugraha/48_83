@@ -3,6 +3,7 @@ var router = express.Router()
 var Product = require('../models').products
 var view = require('../views')
 var Models = require('../models')
+const jwt = require('../jwt')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const pageLimit = 10
@@ -15,7 +16,18 @@ const paginate = (query, { page, pageSize }) => {
     return {...query,offset,limit};
 };
 
-router.get('/', async (req, res, next) => {
+function authenticateToken(req, res, next) {
+  // Gather the jwt access token from the request header
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (token == null) return res.sendStatus(401) // if there isn't any token
+    var check = jwt.verifyLong(token, process.env.SECRET_KEY)
+    if (check.status == "error") return res.sendStatus(403)
+    next()
+
+}
+
+router.get('/', authenticateToken, async (req, res, next) => {
  	const count = await Product.count({})
     const totalPage = Math.ceil(count/pageLimit)
 
