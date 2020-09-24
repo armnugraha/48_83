@@ -5,6 +5,7 @@ var Models = require('../models')
 const bcrypt = require("bcrypt");
 const pageLimit = 10
 const nodemailer = require("nodemailer");
+const Auth = require('./authenticate')
 
 //PAGINATION Function
 const paginate = (query, { page, pageSize }) => {
@@ -14,7 +15,7 @@ const paginate = (query, { page, pageSize }) => {
     return {...query,offset,limit};
 };
 
-router.get('/', async (req, res, next) => {
+router.get('/', Auth, async (req, res, next) => {
  	const count_user = await User.count({})
     const totalPage = Math.ceil(count_user/pageLimit)
 
@@ -41,7 +42,7 @@ router.get('/', async (req, res, next) => {
 	}
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', Auth, async (req, res, next) => {
     const user = await User.findByPk(req.params.id, {
         include: [ Role ]
     })
@@ -53,7 +54,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', Auth, async (req, res, next) => {
     try {
         const {
             company_id,code,total_response,id_client,id_seller,items,cash,total_pay,total_back
