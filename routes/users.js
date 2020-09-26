@@ -7,6 +7,7 @@ var Models = require('../models')
 const bcrypt = require("bcrypt");
 const pageLimit = 10
 const nodemailer = require("nodemailer");
+const Auth = require('./authenticate')
 
 //PAGINATION Function
 const paginate = (query, { page, pageSize }) => {
@@ -43,24 +44,7 @@ router.get('/', async (req, res, next) => {
 	}
 })
 
-router.get('/admin_gunung', async function (req, res, next) {
-    const users = await User.findAll({
-        where: {
-            role_id: 2
-        },
-        order: [
-            ['id', 'DESC']
-        ]
-    })
-
-    if (users.length !== 0) {
-        res.json(view(users))
-    } else {
-        res.json(view('users empty'))
-    }
-})
-
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', Auth, async (req, res, next) => {
     const user = await User.findByPk(req.params.id, {
         include: [ Role ]
     })
@@ -72,7 +56,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', Auth, async (req, res, next) => {
     try {
         const {
             username,name,email,password,phone,gender,birth,
@@ -125,7 +109,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-router.patch('/:id', async function (req, res, next) {
+router.patch('/:id', Auth, async function (req, res, next) {
     try {
         const usersId = req.params.id;
         const {
@@ -177,7 +161,7 @@ router.patch('/:id', async function (req, res, next) {
     }
 });
 
-router.delete('/:id', async function (req, res, next) {
+router.delete('/:id', Auth, async function (req, res, next) {
     try {
         const usersId = req.params.id;
         const users = await Models.users.destroy({ where: {id: usersId}})
