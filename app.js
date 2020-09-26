@@ -4,6 +4,7 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var bodyParser = require('body-parser')
+const cron = require('node-cron');
 
 var indexRouter = require('./routes/index')
 var authRouter = require('./routes/auth')
@@ -66,5 +67,12 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.send({ status: 'error', message: 'opps something wrong, please contact sysadmin' })
 })
+
+// cron jobs
+// const task = cron.schedule('* * * * *', function() {
+//   console.log('success send email');
+// });
+
+// task.start();
 
 module.exports = app
