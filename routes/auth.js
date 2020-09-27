@@ -2,6 +2,7 @@ const express = require('express')
 const jwt = require('../jwt')
 const router = express.Router()
 const bcrypt = require("bcrypt");
+const {Base64} = require('js-base64');
 var User = require('../models').users
 var view = require('../views')
 
@@ -28,15 +29,27 @@ router.post('/', async function (req, res, next) {
     }
 })
 
-// router.get('/refresh', function (req, res, next) {
-//   jwt.verifyLong(req.params.token)
+router.get('/refresh', async function (req, res, next) {
+    let getDataToken = req.query.token;
+    let splitToken = getDataToken.split(".",2);
 
-//   res.send('respond with a resource')
-// })
+    let decodeToken = Base64.decode(splitToken[1])
+    let splitDataToken = decodeToken.split(":",4);
 
-// router.get('/logout', function (req, res, next) {
-//   res.send('respond with a resource')
-// })
+    let getSplitId = splitDataToken[1];
+    let splitDataId = getSplitId.split(",",1);
+    let getId = splitDataId[0];
+
+    let user = await User.findByPk(getId)
+
+    var token = jwt.sign({ id: user.id, email: user.email, role_id: user.role_id, username: user.username, name: user.name })
+
+    res.send(view(token))
+})
+
+router.get('/logout', function (req, res, next) {
+    res.send('respond with a resource')
+})
 
 // router.get('/reset', function (req, res, next) {
 //   res.send('reset password')
