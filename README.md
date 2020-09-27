@@ -115,3 +115,7 @@ https://github.com/rotaready/moment-range
 https://cloud.githubusercontent.com/assets/21040043/24750025/8c8d044e-1aef-11e7-8fd7-7d64431af7e4.png
 
 https://stackoverflow.com/questions/20943089/how-to-convert-unix-timestamp-to-calendar-date-moment-js
+
+
+##BASE64
+https://www.npmjs.com/package/js-base64
